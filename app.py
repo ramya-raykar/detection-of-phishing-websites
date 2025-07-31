@@ -2,8 +2,8 @@ import streamlit as st
 import pickle
 
 # Load model
-with open('phishing_model.pkl', 'rb') as f:
-    model = pickle.load(f)
+import joblib
+model = joblib.load('phishing_model.joblib')
 
 st.title("Phishing Website Detection")
 url = st.text_input("Enter website URL features")
