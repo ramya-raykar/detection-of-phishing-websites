@@ -22,3 +22,10 @@ if st.button("Predict"):
         st.error("⚠ Phishing Website Detected!")
     else:
         st.success("✅ Legitimate Website")
+def extract_features(url):
+    features = []
+    features.append(len(url))                   # Length of URL
+    features.append(int('https' not in url))    # HTTPS check
+    features.append(int('.com' not in url))     # .com presence
+    # Add more features based on how your model was trained
+    return features
