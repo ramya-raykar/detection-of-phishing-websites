@@ -1,3 +1,4 @@
+
 import streamlit as st
 import pickle
 
@@ -18,5 +19,6 @@ if st.button("Predict"):
     else:
         st.success("✅ Legitimate Website")
 # Before prediction
+features = extract_features(user_input)  # or however you're generating features
 features = [str(f) if f is not None else "" for f in features]
 result = model.predict(features)
