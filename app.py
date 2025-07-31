@@ -17,3 +17,6 @@ if st.button("Predict"):
         st.error("⚠ Phishing Website Detected!")
     else:
         st.success("✅ Legitimate Website")
+# Before prediction
+features = [str(f) if f is not None else "" for f in features]
+result = model.predict(features)
