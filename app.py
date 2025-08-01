@@ -5,27 +5,36 @@ import joblib
 model = joblib.load('phishing_model.joblib')
 
 # Title
-st.title("Phishing Website Detection")
+st.title("🔍 Phishing Website Detection")
 
-# User input
+# Input URL
 url = st.text_input("Enter a website URL")
+
+# Feature extraction function
+def extract_features(url):
+    features = []
+    features.append(len(url))                         # Length of URL
+    features.append(int('https' not in url))          # No HTTPS
+    features.append(int('.com' not in url))           # Missing .com
+    features.append(int('@' in url))                  # Suspicious character
+    features.append(int(url.count('.') > 3))          # Too many dots
+    features.append(int('-' in url))                  # Hyphen usage
+    features.append(int(url.startswith('http://')))   # Insecure protocol
+    features.append(int(url.endswith('.zip')))        # Suspicious file type
+    features.append(int('login' in url.lower()))      # Phishing keyword
+    features.append(int('ip' in url.lower()))         # IP address usage
+    return features
 
 # Predict button
 if st.button("Predict"):
-    # Replace this with your actual feature extraction function
-    features = extract_features(url)  # Your custom logic
-    features = [str(f) if f is not None else "" for f in features]
-    result = model.predict([features])
+    if url:
+        features = extract_features(url)
+        result = model.predict([features])
 
-    # Display result
-    if result[0] == 1:
-        st.error("⚠ Phishing Website Detected!")
+        # Display result
+        if result[0] == 1:
+            st.error("⚠ Phishing Website Detected!")
+        else:
+            st.success("✅ Legitimate Website")
     else:
-        st.success("✅ Legitimate Website")
-def extract_features(url):
-    features = []
-    features.append(len(url))                   # Length of URL
-    features.append(int('https' not in url))    # HTTPS check
-    features.append(int('.com' not in url))     # .com presence
-    # Add more features based on how your model was trained
-    return features
+        st.warning("Please enter a URL to continue.")
